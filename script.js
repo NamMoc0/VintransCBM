@@ -671,52 +671,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCalculateShipping = $('#btn-calculate-shipping');
     const btnResetShipping = $('#btn-reset-shipping');
     const shippingResultDiv = $('#shipping-result');
-    // PWA Install button
-    const installAppBtn = $('#install-app-btn');
-
-    // --- PWA INSTALL STATE ---
-    let deferredPrompt;
-
-    const initPWA = () => {
-        if (installAppBtn) {
-            installAppBtn.style.display = 'none';
-        }
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent the mini-infobar from appearing on mobile
-            e.preventDefault();
-            // Stash the event so it can be triggered later.
-            deferredPrompt = e;
-            // Update UI to notify the user they can install the PWA
-            if (installAppBtn) {
-                installAppBtn.style.display = 'block';
-            }
-        });
-
-        if (installAppBtn) {
-            installAppBtn.addEventListener('click', async () => {
-                // Hide the app provided install promotion
-                installAppBtn.style.display = 'none';
-                // Show the install prompt
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    // Wait for the user to respond to the prompt
-                    const { outcome } = await deferredPrompt.userChoice;
-                    console.log(`User response to the install prompt: ${outcome}`);
-                    // We've used the prompt, and can't use it again, throw it away
-                    deferredPrompt = null;
-                }
-            });
-        }
-    };
-    
-    const initEventListeners = () => {
-        // ... (existing event listeners)
-
-        // PWA Install Button
-        initPWA();
-    };
-
 
     // --- PROVINCE CHECKER STATE ---
     // Danh sách 32 tỉnh HÀNG BAY (từ Android app)
@@ -908,23 +862,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const { v1, v2, v3, v4 } = inputs;
             const { cbm, kgDuongBo, kgVinEco, kgCpn, kgHoaToc } = calculatedOutputs;
             
-            return `<i data-lucide="package"></i> [${timestamp}] Kiện ${groupNumber}:\n` +
+            return `📦 [${timestamp}] Kiện ${groupNumber}:\n` +
                    `Dài: ${df(v1)}, Rộng: ${df(v2)}, Cao: ${df(v3)}, Số kiện: ${df(v4)}\n` +
-                   `<i data-lucide="sparkles"></i> CBM = ${df(cbm)}\n` +
-                   `<i data-lucide="truck"></i> Kg (ĐƯỜNG BỘ) = ${df(kgDuongBo)}\n` +
-                   `<i data-lucide="leaf"></i> Kg (VIN-ECO) = ${df(kgVinEco)}\n` +
-                   `<i data-lucide="plane"></i> Kg (CPN) = ${df(kgCpn)}\n` +
-                   `<i data-lucide="rocket"></i> Kg (HỎA TỐC) = ${df(kgHoaToc)}`;
+                   `✨ CBM = ${df(cbm)}\n` +
+                   `🚛 Kg (ĐƯỜNG BỘ) = ${df(kgDuongBo)}\n` +
+                   `🚐 Kg (VIN-ECO) = ${df(kgVinEco)}\n` +
+                   `✈️ Kg (CPN) = ${df(kgCpn)}\n` +
+                   `🚀 Kg (HỎA TỐC) = ${df(kgHoaToc)}`;
         } else if (entry.type === 'province') {
-            return `<i data-lucide="building-2"></i> [${entry.timestamp}] Kiểm tra tỉnh: ${entry.province} → ${entry.result}`;
+            return `🏙️ [${entry.timestamp}] Kiểm tra tỉnh: ${entry.province} → ${entry.result}`;
         } else if (entry.type === 'shipping') {
             const { timestamp, data } = entry;
             const { tinh, huyen, vung, tuyen, trongLuong, danhSachDichVu } = data;
             
-            let result = `<i data-lucide="truck"></i> [${timestamp}] Tính cước phí:\n`;
-            result += `<i data-lucide="map-pin"></i> ${huyen}, ${tinh} (${vung} - ${tuyen})\n`;
-            result += `<i data-lucide="scale"></i> Trọng lượng: ${trongLuong} kg\n`;
-            result += `\n<i data-lucide="clipboard-list"></i> Bảng giá:\n`;
+            let result = `💰 [${timestamp}] Tính cước phí:\n`;
+            result += `📍 ${huyen}, ${tinh} (${vung} - ${tuyen})\n`;
+            result += `⚖️ Trọng lượng: ${trongLuong} kg\n`;
+            result += `\n📊 Bảng giá:\n`;
             
             danhSachDichVu.forEach(dichVu => {
                 if (dichVu.disabled) {
@@ -941,7 +895,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const renderHistory = () => {
         if (history.length === 0) {
-            historyListDiv.innerHTML = '<p><i data-lucide="history"></i> LỊCH SỬ TÍNH TOÁN:\n\nChưa có dữ liệu tính toán nào.</p>';
+            historyListDiv.innerHTML = '<p>📋 LỊCH SỬ TÍNH TOÁN:\n\nChưa có dữ liệu tính toán nào.</p>';
             pageInfoSpan.textContent = 'Trang 1/1';
             prevPageBtn.disabled = true;
             nextPageBtn.disabled = true;
@@ -955,8 +909,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = Math.min(startIndex + itemsPerPage, history.length);
         
-        let html = `<div class="history-header"><i data-lucide="history"></i> LỊCH SỬ TÍNH TOÁN</div>`;
-        html += `<div class="history-stats"><i data-lucide="bar-chart-2"></i> Hiển thị ${startIndex + 1}-${endIndex} trên tổng ${history.length} mục</div>`;
+        let html = `<div class="history-header">📋 LỊCH SỬ TÍNH TOÁN</div>`;
+        html += `<div class="history-stats">📊 Hiển thị ${startIndex + 1}-${endIndex} trên tổng ${history.length} mục</div>`;
         
         // Hiển thị các mục trong trang hiện tại
         for (let i = startIndex; i < endIndex; i++) {
@@ -965,6 +919,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         historyListDiv.innerHTML = html;
+        if (typeof lucide !== 'undefined') lucide.createIcons();
         
         // Cập nhật thông tin trang
         pageInfoSpan.textContent = `Trang ${currentPage}/${totalPages}`;
@@ -1029,17 +984,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             groupHtml += `
                 <div class="group-item${isLast ? ' new-item' : ''}" data-group-index="${index}">
-                    <p class="group-title"><i data-lucide="package"></i> Kiện ${group.groupNumber}:</p>
+                    <p class="group-title">☀️ Kiện ${group.groupNumber}:</p>
                     <p>Dài: <span class="value">${df(v1)}</span></p>
                     <p>Rộng: <span class="value">${df(v2)}</span></p>
                     <p>Cao: <span class="value">${df(v3)}</span></p>
                     <p>Số kiện: <span class="value">${df(v4)}</span></p>
                     <hr>
-                    <p><i data-lucide="sparkles"></i> CBM kiện ${group.groupNumber} = ${df(cbm)}, Tổng: ${df(totalCbm)}, Số Kiện: ${df(totalPieces)}</p>
-                    <p><i data-lucide="truck"></i> Kg kiện ${group.groupNumber} (ĐƯỜNG BỘ) = ${df(kgDuongBo)}, Tổng: ${df(totalKgDuongBo)}</p>
-                    <p><i data-lucide="leaf"></i> Kg kiện ${group.groupNumber} (VIN-ECO) = ${df(kgVinEco)}, Tổng: ${df(totalKgVinEco)}</p>
-                    <p><i data-lucide="plane"></i> Kg kiện ${group.groupNumber} (CPN) = ${df(kgCpn)}, Tổng: ${df(totalKgCpn)}</p>
-                    <p><i data-lucide="rocket"></i> Kg kiện ${group.groupNumber} (HỎA TỐC) = ${df(kgHoaToc)}, Tổng: ${df(totalKgHoaToc)}</p>
+                    <p>✨ CBM kiện ${group.groupNumber} = ${df(cbm)}, Tổng: ${df(totalCbm)}, Số Kiện: ${df(totalPieces)}</p>
+                    <p>🚛 Kg kiện ${group.groupNumber} (ĐƯỜNG BỘ) = ${df(kgDuongBo)}, Tổng: ${df(totalKgDuongBo)}</p>
+                    <p>🚐 Kg kiện ${group.groupNumber} (VIN-ECO) = ${df(kgVinEco)}, Tổng: ${df(totalKgVinEco)}</p>
+                    <p>✈️ Kg kiện ${group.groupNumber} (CPN) = ${df(kgCpn)}, Tổng: ${df(totalKgCpn)}</p>
+                    <p>🚀 Kg kiện ${group.groupNumber} (HỎA TỐC) = ${df(kgHoaToc)}, Tổng: ${df(totalKgHoaToc)}</p>
                 </div>`;
         });
         
@@ -1049,10 +1004,11 @@ document.addEventListener('DOMContentLoaded', () => {
             for(let i=0; i < cbmCurrentIndex - 1; i++) {
                 currentInputHtml += `${labels[i]}: <span class="value">${df(cbmBuffer[i])}</span>, `;
             }
-            groupHtml += `<div class="group-item current-input"><strong><i data-lucide="package-plus"></i> Kiện ${cbmCurrentGroup} (đang nhập):</strong><br>${currentInputHtml.slice(0, -2)}</div>`;
+            groupHtml += `<div class="group-item current-input"><strong>☀️ Kiện ${cbmCurrentGroup} (đang nhập):</strong><br>${currentInputHtml.slice(0, -2)}</div>`;
         }
         
         groupsDisplay.innerHTML = groupHtml || '<p class="empty-message">Chưa có lô hàng nào.</p>';
+        if (typeof lucide !== 'undefined') lucide.createIcons();
 
         // Auto-scroll to show current input after every render (Mobile & PC)
         setTimeout(() => {
@@ -1193,15 +1149,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // Kiểm tra xem tỉnh có trong danh sách 63 tỉnh không
         if (!allProvinces.includes(inputProvince)) {
             // Không có trong danh sách → Không tìm thấy
-            resultText = '<i data-lucide="search-x"></i> Không tìm thấy';
+            resultText = '❓ Không tìm thấy';
             resultClass = '';
         } else if (hangBayProvinces.includes(inputProvince)) {
             // Có trong danh sách 32 tỉnh Hàng Bay
-            resultText = '<i data-lucide="plane"></i> Hàng Bay';
+            resultText = '✈️ Hàng Bay';
             resultClass = 'hang-bay';
         } else {
             // Có trong 63 tỉnh nhưng không phải Hàng Bay → Hàng Bộ
-            resultText = '<i data-lucide="truck"></i> Hàng Bộ';
+            resultText = '🚛 Hàng Bộ';
             resultClass = 'hang-bo';
         }
 
@@ -1224,6 +1180,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="arrow">→</span>
             <span class="result">${resultText}</span>
         `;
+        if (typeof lucide !== 'undefined') lucide.createIcons();
 
         // Insert after header
         const header = provinceResultDiv.querySelector('.province-header');
@@ -1542,8 +1499,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. VIN-TRUCK (Áp dụng quy định mới 2025)
         const chiTietTruck = tinhGiaTheoBangMoi(bangGiaVinTruck, kgInput, vung);
         const giaGocTruck = chiTietTruck.giaGoc;
-        // Nhân hệ số 1.32 (nhiên liệu & VAT) trước - BẮT BUỘC cho tất cả dịch vụ
-        const sauNhiLieuVATTruck = Math.round(giaGocTruck * 1.32);
+        // Nhân hệ số 1.3878 (nhiên liệu & VAT) trước - BẮT BUỘC cho tất cả dịch vụ
+        const sauNhiLieuVATTruck = Math.round(giaGocTruck * 1.3878);
         // Nhân hệ số ngoại tuyến sau (nếu ngoại tuyến) - dựa trên TỔNG KG GỐC
         let heSoNgoaiTuyenTruck = 1;
         if (loaiTuyen === 'ngoai') {
@@ -1573,7 +1530,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         danhSachKetQua.push({
             ten: "VIN-TRUCK (Đường Bộ)",
-            icon: "🚛",
+            icon: '<i data-lucide="truck"></i>',
             giaCoBan: giaGocTruck,
             phuPhiNgoaiTuyen: phuPhiNgoaiTuyenTruck,
             phuPhiXangVAT: phuPhiXangVATTruck,
@@ -1588,8 +1545,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (kgInput >= 30) {
             const chiTietEco = tinhGiaTheoBangMoi(bangGiaVinEco, kgInput, vung);
             const giaGocEco = chiTietEco.giaGoc;
-            // Nhân hệ số 1.32 (nhiên liệu & VAT) trước - BẮT BUỘC cho tất cả dịch vụ
-            const sauNhiLieuVATEco = Math.round(giaGocEco * 1.32);
+            // Nhân hệ số 1.3878 (nhiên liệu & VAT) trước - BẮT BUỘC cho tất cả dịch vụ
+            const sauNhiLieuVATEco = Math.round(giaGocEco * 1.3878);
             // Nhân hệ số ngoại tuyến sau (nếu ngoại tuyến) - dựa trên TỔNG KG GỐC
             let heSoNgoaiTuyenEco = 1;
             if (loaiTuyen === 'ngoai') {
@@ -1618,7 +1575,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             danhSachKetQua.push({
                 ten: "VIN-ECO (Tiết Kiệm)",
-                icon: "🚐",
+                icon: '<i data-lucide="bus"></i>',
                 giaCoBan: giaGocEco,
                 phuPhiNgoaiTuyen: phuPhiNgoaiTuyenEco,
                 phuPhiXangVAT: phuPhiXangVATEco,
@@ -1632,7 +1589,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Hiển thị card bị vô hiệu hóa
             danhSachKetQua.push({
                 ten: "VIN-ECO (Tiết Kiệm)",
-                icon: "🚐",
+                icon: '<i data-lucide="bus"></i>',
                 giaCoBan: 0,
                 phuPhiNgoaiTuyen: 0,
                 phuPhiXangVAT: 0,
@@ -1646,8 +1603,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // 3. VIN-EXPRESS
         const chiTietExpress = tinhGiaChiTietExpress(kgInput, vung);
         const giaGocExpress = chiTietExpress.giaCoBan;
-        // Nhân hệ số 1.32 (nhiên liệu & VAT) trước - BẮT BUỘC cho tất cả dịch vụ
-        const sauNhiLieuVATExpress = Math.round(giaGocExpress * 1.32);
+        // Nhân hệ số 1.3878 (nhiên liệu & VAT) trước - BẮT BUỘC cho tất cả dịch vụ
+        const sauNhiLieuVATExpress = Math.round(giaGocExpress * 1.3878);
         // Nhân hệ số ngoại tuyến sau (nếu ngoại tuyến) - dựa trên TỔNG KG GỐC
         let heSoNgoaiTuyenExpress = 1;
         if (loaiTuyen === 'ngoai') {
@@ -1674,7 +1631,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         danhSachKetQua.push({
             ten: "VIN-EXPRESS (Chuyển Phát Nhanh)",
-            icon: "✈️",
+            icon: '<i data-lucide="plane"></i>',
             giaCoBan: giaGocExpress,
             phuPhiNgoaiTuyen: phuPhiNgoaiTuyenExpress,
             phuPhiXangVAT: phuPhiXangVATExpress,
@@ -1688,8 +1645,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // 4. VIN-HOATOC
         const chiTietHoaToc = tinhGiaChiTietHoaToc(kgInput, vung);
         const giaGocHoaToc = chiTietHoaToc.giaCoBan;
-        // Nhân hệ số 1.32 (nhiên liệu & VAT) trước - BẮT BUỘC cho tất cả dịch vụ
-        const sauNhiLieuVATHoaToc = Math.round(giaGocHoaToc * 1.32);
+        // Nhân hệ số 1.3878 (nhiên liệu & VAT) trước - BẮT BUỘC cho tất cả dịch vụ
+        const sauNhiLieuVATHoaToc = Math.round(giaGocHoaToc * 1.3878);
         // Nhân hệ số ngoại tuyến sau (nếu ngoại tuyến) - dựa trên TỔNG KG GỐC
         let heSoNgoaiTuyenHoaToc = 1;
         if (loaiTuyen === 'ngoai') {
@@ -1716,7 +1673,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         danhSachKetQua.push({
             ten: "VIN-HOATOC (Hỏa Tốc)",
-            icon: "🚀",
+            icon: '<i data-lucide="zap"></i>',
             giaCoBan: giaGocHoaToc,
             phuPhiNgoaiTuyen: phuPhiNgoaiTuyenHoaToc,
             phuPhiXangVAT: phuPhiXangVATHoaToc,
@@ -1830,8 +1787,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="process-step">
                                 <div class="step-number">7</div>
                                 <div class="step-content">
-                                    <div class="step-label">Nhân hệ số nhiên liệu & VAT (× 1.32):</div>
-                                    <div class="step-value">${formatTien(ct.giaGoc)} × 1.32 = <strong>${formatTien(ct.sauNhiLieuVAT)}</strong></div>
+                                    <div class="step-label">Nhân hệ số nhiên liệu & VAT (× 1.3878):</div>
+                                    <div class="step-value">${formatTien(ct.giaGoc)} × 1.3878 = <strong>${formatTien(ct.sauNhiLieuVAT)}</strong></div>
                                 </div>
                             </div>
                             ${ketQua.tuyen === 'Ngoại tuyến' ? (() => {
@@ -1888,8 +1845,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="process-step">
                                 <div class="step-number">3</div>
                                 <div class="step-content">
-                                    <div class="step-label">Nhân hệ số nhiên liệu & VAT (× 1.32):</div>
-                                    <div class="step-value">${formatTien(ct.gia10kgDau)} × 1.32 = <strong>${formatTien(ct.sauNhiLieuVAT)}</strong></div>
+                                    <div class="step-label">Nhân hệ số nhiên liệu & VAT (× 1.3878):</div>
+                                    <div class="step-value">${formatTien(ct.gia10kgDau)} × 1.3878 = <strong>${formatTien(ct.sauNhiLieuVAT)}</strong></div>
                                 </div>
                             </div>
                             ${ketQua.tuyen === 'Ngoại tuyến' ? (() => {
@@ -1979,8 +1936,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="process-step">
                             <div class="step-number">5</div>
                             <div class="step-content">
-                                <div class="step-label">Nhân hệ số nhiên liệu & VAT (× 1.32):</div>
-                                <div class="step-value">${formatTien(ct.giaCoBan)} × 1.32 = <strong>${formatTien(ct.sauNhiLieuVAT)}</strong></div>
+                                <div class="step-label">Nhân hệ số nhiên liệu & VAT (× 1.3878):</div>
+                                <div class="step-value">${formatTien(ct.giaCoBan)} × 1.3878 = <strong>${formatTien(ct.sauNhiLieuVAT)}</strong></div>
                             </div>
                         </div>
                         ${ketQua.tuyen === 'Ngoại tuyến' ? `
@@ -2011,8 +1968,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="process-step">
                             <div class="step-number">4</div>
                             <div class="step-content">
-                                <div class="step-label">Nhân hệ số nhiên liệu & VAT (× 1.32):</div>
-                                <div class="step-value">${formatTien(ct.giaCoBan)} × 1.32 = <strong>${formatTien(ct.sauNhiLieuVAT)}</strong></div>
+                                <div class="step-label">Nhân hệ số nhiên liệu & VAT (× 1.3878):</div>
+                                <div class="step-value">${formatTien(ct.giaCoBan)} × 1.3878 = <strong>${formatTien(ct.sauNhiLieuVAT)}</strong></div>
                             </div>
                         </div>
                         ${ketQua.tuyen === 'Ngoại tuyến' ? `
@@ -2153,6 +2110,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         shippingResultDiv.innerHTML = html;
         shippingResultDiv.scrollTop = 0;
+        
+        // Khởi tạo Lucide icons sau khi render HTML động
+        if (typeof lucide !== 'undefined') lucide.createIcons();
         
         // Thêm event listener cho các service card có thể click
         const serviceCards = shippingResultDiv.querySelectorAll('.service-clickable');
@@ -2586,17 +2546,167 @@ document.addEventListener('DOMContentLoaded', () => {
         resetSettingsBtn.addEventListener('click', resetSettings);
     }
     
+    // --- HÀNG BONG BÓNG CÁ ---
+    // Hằng số cho hàng Bong Bóng Cá
+    const BBC_KG_MOT_KIEN = 16.4;      // kg quy đổi mỗi kiện
+    const BBC_DON_GIA = 31000;          // đ/kg
+    const BBC_HE_SO_PHU_PHI = 1.285;   // hệ số phụ phí
+    const BBC_HE_SO_VAT = 1.08;        // hệ số VAT
+
+    // Hàm định dạng số tiền
+    const formatTienBBC = (so) => {
+        return Math.round(so).toLocaleString('vi-VN') + ' đ';
+    };
+
+    // Hàm tính và hiển thị kết quả Bong Bóng Cá
+    const tinhBongBongCa = () => {
+        const bbcSoKienInput = $('#bbc-so-kien');
+        const bbcResultDiv = $('#bbc-result');
+        if (!bbcSoKienInput || !bbcResultDiv) return;
+
+        const soKienRaw = sanitizeNumber(bbcSoKienInput.value);
+        const soKien = parseFloat(soKienRaw);
+
+        // Validate
+        if (!soKienRaw || isNaN(soKien) || soKien <= 0) {
+            bbcResultDiv.innerHTML = '<div class="bbc-error"><i data-lucide="alert-circle"></i> Vui lòng nhập số kiện hợp lệ (lớn hơn 0).</div>';
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            return;
+        }
+
+        // Tính từng bước
+        const soKgQuyDoi = soKien * BBC_KG_MOT_KIEN;
+        const tienTruocHeSo = soKgQuyDoi * BBC_DON_GIA;
+        const tienSauPhuPhi = tienTruocHeSo * BBC_HE_SO_PHU_PHI;
+        const tongTien = tienSauPhuPhi * BBC_HE_SO_VAT;
+
+        const html = `
+            <div class="bbc-result-content">
+                <div class="bbc-result-title">
+                    <i data-lucide="check-circle"></i>
+                    KẾT QUẢ TÍNH TIỀN
+                </div>
+
+                <div class="bbc-summary-box">
+                    <div class="bbc-summary-label">Số kiện hàng</div>
+                    <div class="bbc-summary-value highlight">${soKien.toLocaleString('vi-VN')} kiện</div>
+                </div>
+
+                <div class="bbc-steps">
+                    <div class="bbc-step">
+                        <div class="bbc-step-num">1</div>
+                        <div class="bbc-step-body">
+                            <div class="bbc-step-label">Tính kg quy đổi:</div>
+                            <div class="bbc-step-formula">${soKien.toLocaleString('vi-VN')} kiện × ${BBC_KG_MOT_KIEN} kg/kiện</div>
+                            <div class="bbc-step-result">= <strong>${soKgQuyDoi.toLocaleString('vi-VN')} kg</strong></div>
+                        </div>
+                    </div>
+                    <div class="bbc-step">
+                        <div class="bbc-step-num">2</div>
+                        <div class="bbc-step-body">
+                            <div class="bbc-step-label">Tính tiền gốc:</div>
+                            <div class="bbc-step-formula">${soKgQuyDoi.toLocaleString('vi-VN')} kg × ${BBC_DON_GIA.toLocaleString('vi-VN')} đ/kg</div>
+                            <div class="bbc-step-result">= <strong>${formatTienBBC(tienTruocHeSo)}</strong></div>
+                        </div>
+                    </div>
+                    <div class="bbc-step">
+                        <div class="bbc-step-num">3</div>
+                        <div class="bbc-step-body">
+                            <div class="bbc-step-label">Nhân hệ số phụ phí (× ${BBC_HE_SO_PHU_PHI}):</div>
+                            <div class="bbc-step-formula">${formatTienBBC(tienTruocHeSo)} × ${BBC_HE_SO_PHU_PHI}</div>
+                            <div class="bbc-step-result">= <strong>${formatTienBBC(tienSauPhuPhi)}</strong></div>
+                        </div>
+                    </div>
+                    <div class="bbc-step">
+                        <div class="bbc-step-num">4</div>
+                        <div class="bbc-step-body">
+                            <div class="bbc-step-label">Nhân hệ số VAT (× ${BBC_HE_SO_VAT}):</div>
+                            <div class="bbc-step-formula">${formatTienBBC(tienSauPhuPhi)} × ${BBC_HE_SO_VAT}</div>
+                            <div class="bbc-step-result">= <strong>${formatTienBBC(tongTien)}</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bbc-total-box">
+                    <div class="bbc-total-label">💰 TỔNG TIỀN CẦN THANH TOÁN</div>
+                    <div class="bbc-total-value">${formatTienBBC(tongTien)}</div>
+                    <div class="bbc-total-note">= (${soKgQuyDoi.toLocaleString('vi-VN')} kg × ${BBC_DON_GIA.toLocaleString('vi-VN')}) × ${BBC_HE_SO_PHU_PHI} × ${BBC_HE_SO_VAT}</div>
+                </div>
+            </div>
+        `;
+
+        bbcResultDiv.innerHTML = html;
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+        bbcResultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    };
+
+    // Reset form Bong Bóng Cá
+    const resetBongBongCa = () => {
+        const bbcSoKienInput = $('#bbc-so-kien');
+        const bbcResultDiv = $('#bbc-result');
+        if (bbcSoKienInput) bbcSoKienInput.value = '';
+        if (bbcResultDiv) {
+            bbcResultDiv.innerHTML = `
+                <div class="bbc-result-empty">
+                    <i data-lucide="fish"></i>
+                    <p>Nhập số kiện và nhấn "Tính Tiền" để xem kết quả</p>
+                </div>
+            `;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+        if (bbcSoKienInput) bbcSoKienInput.focus();
+    };
+
+    // Khởi tạo nút sub-tab navigation
+    const khoiTaoSubTab = () => {
+        const subTabBtns = document.querySelectorAll('.sub-tab-btn');
+        const subTabContents = document.querySelectorAll('.sub-tab-content');
+
+        subTabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetSubTab = btn.dataset.subTab;
+
+                // Cập nhật trạng thái nút
+                subTabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Cập nhật nội dung hiển thị
+                subTabContents.forEach(content => content.classList.remove('active'));
+                const targetContent = $(`#sub-tab-${targetSubTab}`);
+                if (targetContent) targetContent.classList.add('active');
+
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            });
+        });
+
+        // Gắn nút Tính Tiền Bong Bóng Cá
+        const btnTinhBBC = $('#btn-tinh-bbc');
+        const btnResetBBC = $('#btn-reset-bbc');
+        const bbcSoKienInput = $('#bbc-so-kien');
+
+        if (btnTinhBBC) btnTinhBBC.addEventListener('click', tinhBongBongCa);
+        if (btnResetBBC) btnResetBBC.addEventListener('click', resetBongBongCa);
+        if (bbcSoKienInput) {
+            bbcSoKienInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') tinhBongBongCa();
+            });
+        }
+    };
+
     // --- INIT ---
     loadSettings(); // Load theme and settings first
     renderCBM();
     renderHistory();
     khoiTaoCuocPhi(); // Khởi tạo Shipping Calculator
-    
+    khoiTaoSubTab();  // Khởi tạo Sub-tab và Bong Bóng Cá
+
+    // Khởi tạo tất cả Lucide icons trong HTML tĩnh
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+
     // Start with hamburger hidden
     if (hamburgerMenu) {
         hamburgerMenu.classList.add('hidden');
     }
-    
+
     cbmInput.focus();
-    lucide.createIcons();
 });

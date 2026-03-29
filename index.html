@@ -3,14 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#1a73e8">
     <title>VinTransCBM - Web</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="style-new.css">
     <link rel="stylesheet" href="settings.css">
-    <link rel="manifest" href="manifest.json">
-    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
     <div id="app">
@@ -23,8 +18,8 @@
         
         <!-- Theme Toggle Button -->
         <button id="theme-toggle" class="theme-toggle" aria-label="Chuyển đổi giao diện">
-            <i data-lucide="sun" class="theme-icon sun-icon"></i>
-            <i data-lucide="moon" class="theme-icon moon-icon"></i>
+            <span class="theme-icon sun-icon"><i data-lucide="sun"></i></span>
+            <span class="theme-icon moon-icon"><i data-lucide="moon"></i></span>
         </button>
         
         <!-- Mobile Slide Menu -->
@@ -35,23 +30,23 @@
             </div>
             <nav class="slide-menu-nav">
                 <button class="slide-menu-item active" data-tab="cbm-calculator">
-                    <i data-lucide="calculator" class="menu-icon"></i>
+                    <span class="menu-icon"><i data-lucide="calculator"></i></span>
                     <span class="menu-text">Tính Toán</span>
                 </button>
                 <button class="slide-menu-item" data-tab="history">
-                    <i data-lucide="history" class="menu-icon"></i>
+                    <span class="menu-icon"><i data-lucide="history"></i></span>
                     <span class="menu-text">Lịch Sử</span>
                 </button>
                 <button class="slide-menu-item" data-tab="province-checker">
-                    <i data-lucide="map-pin" class="menu-icon"></i>
+                    <span class="menu-icon"><i data-lucide="map-pin"></i></span>
                     <span class="menu-text">Kiểm Tra Tỉnh</span>
                 </button>
                 <button class="slide-menu-item" data-tab="shipping-calculator">
-                    <i data-lucide="truck" class="menu-icon"></i>
+                    <span class="menu-icon"><i data-lucide="package"></i></span>
                     <span class="menu-text">Tính Cước Phí</span>
                 </button>
                 <button class="slide-menu-item" data-tab="settings">
-                    <i data-lucide="settings" class="menu-icon"></i>
+                    <span class="menu-icon"><i data-lucide="settings"></i></span>
                     <span class="menu-text">Cài Đặt</span>
                 </button>
             </nav>
@@ -63,23 +58,23 @@
         <!-- Desktop Sidebar Navigation -->
         <nav class="sidebar-nav">
             <button class="nav-item active" data-tab="cbm-calculator">
-                <i data-lucide="calculator" class="nav-icon"></i>
+                <span class="nav-icon"><i data-lucide="calculator"></i></span>
                 <span class="nav-text">Tính Toán</span>
             </button>
             <button class="nav-item" data-tab="history">
-                <i data-lucide="history" class="nav-icon"></i>
+                <span class="nav-icon"><i data-lucide="history"></i></span>
                 <span class="nav-text">Lịch Sử</span>
             </button>
             <button class="nav-item" data-tab="province-checker">
-                <i data-lucide="map-pin" class="nav-icon"></i>
+                <span class="nav-icon"><i data-lucide="map-pin"></i></span>
                 <span class="nav-text">Kiểm Tra Tỉnh</span>
             </button>
             <button class="nav-item" data-tab="shipping-calculator">
-                <i data-lucide="truck" class="nav-icon"></i>
+                <span class="nav-icon"><i data-lucide="package"></i></span>
                 <span class="nav-text">Tính Cước Phí</span>
             </button>
             <button class="nav-item" data-tab="settings">
-                <i data-lucide="settings" class="nav-icon"></i>
+                <span class="nav-icon"><i data-lucide="settings"></i></span>
                 <span class="nav-text">Cài Đặt</span>
             </button>
         </nav>
@@ -119,9 +114,9 @@
                     
                     <!-- Phân trang -->
                     <div class="pagination-controls">
-                        <button id="prev-page-button" disabled><i data-lucide="arrow-left"></i> Trước</button>
+                        <button id="prev-page-button" disabled>◀ Trước</button>
                         <span id="page-info">Trang 1/1</span>
-                        <button id="next-page-button" disabled>Sau <i data-lucide="arrow-right"></i></button>
+                        <button id="next-page-button" disabled>Sau ▶</button>
                     </div>
                     
                     <!-- Nút xóa -->
@@ -139,7 +134,7 @@
                         <button id="btn-clear-province">Xóa Kết Quả</button>
                     </div>
                     <div id="province-result" class="province-result">
-                        <div class="province-header"><i data-lucide="building-2"></i> KIỂM TRA TỈNH THÀNH</div>
+                        <div class="province-header">🏙️ KIỂM TRA TỈNH THÀNH</div>
                         <div class="province-message">Nhập tên tỉnh để kiểm tra loại vận chuyển.</div>
                     </div>
                 </div>
@@ -147,40 +142,104 @@
 
             <!-- Tab Tính Cước Phí -->
             <div id="shipping-calculator" class="tab-content">
-                <div class="shipping-calculator-container">
-                    <!-- Form nhập liệu -->
-                    <div class="shipping-form">
-                        <div class="form-header"><i data-lucide="truck"></i> TÍNH CƯỚC VẬN CHUYỂN</div>
-                        
-                        <div class="form-group">
-                            <label for="shipping-tinh-select">Tỉnh/Thành phố đến:</label>
-                            <select id="shipping-tinh-select">
-                                <option value="">-- Chọn Tỉnh/Thành phố --</option>
-                            </select>
+                <!-- Sub-tab navigation -->
+                <div class="sub-tab-nav">
+                    <button class="sub-tab-btn active" data-sub-tab="cuoc-phi">
+                        <i data-lucide="package"></i> Tính Cước Phí
+                    </button>
+                    <button class="sub-tab-btn" data-sub-tab="bong-bong-ca">
+                        <i data-lucide="fish"></i> Bong Bóng Cá
+                    </button>
+                </div>
+
+                <!-- Sub-tab 1: Tính Cước Phí (hiện có) -->
+                <div id="sub-tab-cuoc-phi" class="sub-tab-content active">
+                    <div class="shipping-calculator-container">
+                        <div class="shipping-form">
+                            <div class="form-header"><i data-lucide="package" style="width:14px;height:14px;vertical-align:middle;"></i> TÍNH CƯỚC VẬN CHUYỂN</div>
+                            <div class="form-group">
+                                <label for="shipping-tinh-select">Tỉnh/Thành phố đến:</label>
+                                <select id="shipping-tinh-select">
+                                    <option value="">-- Chọn Tỉnh/Thành phố --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="shipping-huyen-select">Quận/Huyện đến:</label>
+                                <select id="shipping-huyen-select" disabled>
+                                    <option value="">-- Vui lòng chọn Tỉnh trước --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="shipping-weight-input">Trọng lượng (kg):</label>
+                                <input type="number" id="shipping-weight-input" placeholder="Nhập số kg..." min="0.1" step="0.1">
+                            </div>
+                            <div class="form-actions">
+                                <button id="btn-calculate-shipping" class="btn-primary">Tính Cước Phí</button>
+                                <button id="btn-reset-shipping" class="btn-secondary">Xóa Form</button>
+                            </div>
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="shipping-huyen-select">Quận/Huyện đến:</label>
-                            <select id="shipping-huyen-select" disabled>
-                                <option value="">-- Vui lòng chọn Tỉnh trước --</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="shipping-weight-input">Trọng lượng (kg):</label>
-                            <input type="number" id="shipping-weight-input" placeholder="Nhập số kg..." min="0.1" step="0.1">
-                        </div>
-                        
-                        <div class="form-actions">
-                            <button id="btn-calculate-shipping" class="btn-primary">Tính Cước Phí</button>
-                            <button id="btn-reset-shipping" class="btn-secondary">Xóa Form</button>
+                        <div id="shipping-result" class="shipping-result">
+                            <div class="result-message">
+                                📦 Vui lòng điền đầy đủ thông tin và nhấn "Tính Cước Phí" để xem kết quả.
+                            </div>
                         </div>
                     </div>
-                    
-                    <!-- Kết quả -->
-                    <div id="shipping-result" class="shipping-result">
-                        <div class="result-message">
-                            <i data-lucide="package"></i> Vui lòng điền đầy đủ thông tin và nhấn "Tính Cước Phí" để xem kết quả.
+                </div>
+
+                <!-- Sub-tab 2: Hàng Bong Bóng Cá -->
+                <div id="sub-tab-bong-bong-ca" class="sub-tab-content">
+                    <div class="bbc-container">
+                        <div class="bbc-info-card">
+                            <div class="bbc-info-title"><i data-lucide="info"></i> Thông Tin Mặc Định</div>
+                            <div class="bbc-info-grid">
+                                <div class="bbc-info-item">
+                                    <span class="bbc-info-label">Kích thước/kiện:</span>
+                                    <span class="bbc-info-value">60 × 40 × 41 cm</span>
+                                </div>
+                                <div class="bbc-info-item">
+                                    <span class="bbc-info-label">Khối lượng quy đổi/kiện:</span>
+                                    <span class="bbc-info-value">16,4 kg</span>
+                                </div>
+                                <div class="bbc-info-item">
+                                    <span class="bbc-info-label">Đơn giá:</span>
+                                    <span class="bbc-info-value">31.000 đ/kg</span>
+                                </div>
+                                <div class="bbc-info-item">
+                                    <span class="bbc-info-label">Hệ số phụ phí:</span>
+                                    <span class="bbc-info-value">× 1,285</span>
+                                </div>
+                                <div class="bbc-info-item">
+                                    <span class="bbc-info-label">Hệ số VAT:</span>
+                                    <span class="bbc-info-value">× 1,08</span>
+                                </div>
+                                <div class="bbc-info-item">
+                                    <span class="bbc-info-label">Dịch vụ:</span>
+                                    <span class="bbc-info-value">Hỏa Tốc (HT)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bbc-form">
+                            <div class="bbc-form-title"><i data-lucide="calculator"></i> TÍNH TIỀN HÀNG BONG BÓNG CÁ</div>
+                            <div class="bbc-form-group">
+                                <label for="bbc-so-kien">Số kiện hàng:</label>
+                                <input type="number" id="bbc-so-kien" placeholder="Nhập số kiện..." min="1" step="1">
+                            </div>
+                            <div class="bbc-form-actions">
+                                <button id="btn-tinh-bbc" class="btn-primary">
+                                    <i data-lucide="calculator"></i> Tính Tiền
+                                </button>
+                                <button id="btn-reset-bbc" class="btn-secondary">
+                                    <i data-lucide="rotate-ccw"></i> Xóa
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="bbc-result" class="bbc-result">
+                            <div class="bbc-result-empty">
+                                <i data-lucide="fish"></i>
+                                <p>Nhập số kiện và nhấn "Tính Tiền" để xem kết quả</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -189,7 +248,7 @@
             <!-- Tab Cài Đặt -->
             <div id="settings" class="tab-content">
                 <div class="settings-container">
-                    <div class="settings-header"><i data-lucide="settings"></i> CÀI ĐẶT GIAO DIỆN</div>
+                    <div class="settings-header"><i data-lucide="settings" style="width:20px;height:20px;vertical-align:middle;"></i> CÀI ĐẶT GIAO DIỆN</div>
                     
                     <!-- Giao diện -->
                     <div class="settings-section">
@@ -198,11 +257,11 @@
                             <label class="setting-label">Chủ đề</label>
                             <div class="theme-switcher">
                                 <button class="theme-btn light-theme-btn" data-theme="light">
-                                    <i data-lucide="sun" class="theme-btn-icon"></i>
+                                    <span class="theme-btn-icon"><i data-lucide="sun"></i></span>
                                     <span class="theme-btn-text">Sáng</span>
                                 </button>
                                 <button class="theme-btn dark-theme-btn" data-theme="dark">
-                                    <i data-lucide="moon" class="theme-btn-icon"></i>
+                                    <span class="theme-btn-icon"><i data-lucide="moon"></i></span>
                                     <span class="theme-btn-text">Tối</span>
                                 </button>
                             </div>
@@ -211,7 +270,7 @@
                     
                     <!-- Kích thước -->
                     <div class="settings-section">
-                        <h3 class="section-title"><i data-lucide="ruler"></i> Kích thước</h3>
+                        <h3 class="section-title"><i data-lucide="sliders-horizontal"></i> Kích thước</h3>
                         <div class="setting-item">
                             <label class="setting-label">Cỡ chữ & Giao diện</label>
                             <div class="size-switcher">
@@ -244,15 +303,6 @@
                             </label>
                         </div>
                     </div>
-
-                    <!-- Ứng dụng -->
-                    <div class="settings-section">
-                        <h3 class="section-title"><i data-lucide="app-window"></i> Ứng dụng</h3>
-                        <div class="setting-item">
-                            <label class="setting-label">Thêm vào màn hình chính</label>
-                            <button id="install-app-btn" class="btn-primary">Cài đặt</button>
-                        </div>
-                    </div>
                     
                     <!-- Nút reset -->
                     <div class="settings-actions">
@@ -265,34 +315,24 @@
         <!-- Mobile Bottom Navigation -->
         <nav class="bottom-nav">
             <button class="bottom-nav-item active" data-tab="cbm-calculator">
-                <i data-lucide="calculator" class="bottom-nav-icon"></i>
+                <span class="bottom-nav-icon"><i data-lucide="calculator"></i></span>
                 <span class="bottom-nav-text">Tính Toán</span>
             </button>
             <button class="bottom-nav-item" data-tab="history">
-                <i data-lucide="history" class="bottom-nav-icon"></i>
+                <span class="bottom-nav-icon"><i data-lucide="history"></i></span>
                 <span class="bottom-nav-text">Lịch Sử</span>
             </button>
             <button class="bottom-nav-item" data-tab="province-checker">
-                <i data-lucide="map-pin" class="bottom-nav-icon"></i>
+                <span class="bottom-nav-icon"><i data-lucide="map-pin"></i></span>
                 <span class="bottom-nav-text">Kiểm Tra</span>
             </button>
             <button class="bottom-nav-item" data-tab="shipping-calculator">
-                <i data-lucide="truck" class="bottom-nav-icon"></i>
+                <span class="bottom-nav-icon"><i data-lucide="package"></i></span>
                 <span class="bottom-nav-text">Cước Phí</span>
             </button>
         </nav>
     </div>
+    <script src="js/lucide.js"></script>
     <script src="script.js"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/service-worker.js', { scope: '/' }).then(registration => {
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-          }, err => {
-            console.log('ServiceWorker registration failed: ', err);
-          });
-        });
-      }
-    </script>
 </body>
 </html>
